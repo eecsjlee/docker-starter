@@ -1,5 +1,5 @@
 # 도커 처음 시작
-
+  
 ## Dockerfile 기본 구성 요소
 
 1. **`FROM`** – 베이스 이미지 선택
@@ -227,4 +227,21 @@ docker restart [컨테이너이름 또는 ID]
 * 자주 사용하는 컨테이너는 의미 있는 이름(`--name`)을 부여하면 관리가 편리합니다.
 * `docker-compose`를 사용하면 여러 컨테이너를 한번에 관리할 수 있습니다.
 
-필요에 따라 이 내용을 `docs/docker-commands.md` 같은 문서로 분리해도 좋습니다. 원하시면 `docker-compose` 관련 명령어도 정리해드릴 수 있습니다.
+
+## Docker Hub
+
+https://hub.docker.com/
+
+docker tag local-image:tagname new-repo:tagname
+docker push new-repo:tagname
+docker pull image:tagname
+
+## Docker Network
+  
+docker network create [네트워크 이름]
+docker network
+docker network ls //도커 네트워크 목록
+
+
+## 참고자료
+[Reverse Proxy 정리](./reverse-proxy.md)
