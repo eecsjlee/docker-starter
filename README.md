@@ -108,7 +108,6 @@ docker ps
 docker ps -a
 ```
 
----
 
 ### 2. 컨테이너 로그 확인
 
@@ -124,7 +123,6 @@ docker logs [컨테이너이름 또는 ID]
 docker logs -f [컨테이너이름]
 ```
 
----
 
 ### 3. 실행 중인 컨테이너에 접속 (쉘)
 
@@ -190,7 +188,6 @@ docker run -d --name [컨테이너이름] -p [호스트포트]:[컨테이너포�
 docker run -d --name my-nginx -p 8080:80 nginx
 ```
 
----
 
 ### 8. 컨테이너 상태 확인
 
@@ -200,7 +197,6 @@ docker inspect [컨테이너이름 또는 ID]
 
 * 컨테이너의 상세 정보(환경 변수, 네트워크, 볼륨 등)를 JSON 형식으로 출력합니다.
 
----
 
 ### 9. 컨테이너 재시작
 
@@ -210,7 +206,6 @@ docker restart [컨테이너이름 또는 ID]
 
 * 컨테이너를 재시작합니다.
 
----
 
 ### 참고
 
@@ -284,11 +279,17 @@ curl 웹서버컨테이너ID
 
   
 
-docker compose up -d
-docker compose stop
-docker compose down
-docker compose --compatibility up
+docker compose up -d  
+docker compose stop  
+docker compose down  
+docker compose --compatibility up  
+
+## Orchestration Tool
+
+
+
 
 ## 참고자료
-[Reverse Proxy 정리](./reverse-proxy.md)
-[Docker Compose 정리](./docker-compose.md)
+
+[Reverse Proxy 정리](./reverse-proxy.md)  
+[Docker Compose 정리](./docker-compose.md)  

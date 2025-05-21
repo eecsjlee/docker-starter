@@ -1,4 +1,3 @@
-
 # docker-compose.yml
 
 `docker-compose.yml` 파일은 여러 컨테이너(서비스)를 하나의 파일로 정의하고 관리할 수 있게 해주는 구성 파일입니다.
@@ -55,10 +54,109 @@ volumes:
 | `restart`     | 컨테이너 자동 재시작 정책 (예: `always`, `on-failure`)          |
 | `volumes:`    | 서비스 간 공유되는 이름있는 볼륨 정의                               |
 
----
 
 ## 실제 상황별 예시
 
 * Node.js + MongoDB:
 * Spring Boot + MySQL:
 * Nginx + React 앱 프록시 구성:
+
+
+---
+
+### Node.js + MongoDB `docker-compose.yml` 예시
+
+* Node.js 앱은 `/app` 디렉토리에 있으며, `Dockerfile`을 기반으로 빌드됩니다.
+* MongoDB는 기본 포트(27017)로 실행됩니다.
+* Node.js 앱은 MongoDB에 연결하기 위해 `MONGO_URL` 환경변수를 사용합니다.
+
+```yaml
+version: '3.8'
+
+services:
+  app:
+    build: ./app
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/mydb
+    depends_on:
+      - mongo
+    volumes:
+      - ./app:/usr/src/app
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:5.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
+```
+
+### 디렉토리 구조 예시
+
+```
+project-root/
+├── app/
+│   ├── Dockerfile
+│   ├── package.json
+│   └── index.js (또는 app.js)
+├── docker-compose.yml
+```
+
+
+### 📄 `app/Dockerfile` 예시
+
+```Dockerfile
+FROM node:18
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+CMD ["npm", "start"]
+```
+
+### 📝 Node.js 내 MongoDB 연결 코드 (`index.js` 예시)
+
+```js
+const express = require('express');
+const { MongoClient } = require('mongodb');
+
+const app = express();
+const port = 3000;
+const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost:27017/mydb';
+
+MongoClient.connect(mongoUrl)
+  .then(client => {
+    const db = client.db();
+    app.get('/', (req, res) => {
+      res.send('MongoDB 연결 성공!');
+    });
+
+    app.listen(port, () => {
+      console.log(`서버가 포트 ${port}에서 실행 중`);
+    });
+  })
+  .catch(err => console.error('MongoDB 연결 실패', err));
+```
+
+### ✅ 요약
+
+| 구성 요소        | 설명                                    |
+| ------------ | ------------------------------------- |
+| `app` 서비스    | Node.js 앱 빌드 및 실행                     |
+| `mongo` 서비스  | MongoDB 공식 이미지로 실행                    |
+| `depends_on` | MongoDB가 먼저 시작되도록 순서 보장               |
+| `MONGO_URL`  | Node.js에서 MongoDB에 접속할 수 있도록 환경변수로 전달 |
+| `volumes`    | MongoDB 데이터 유지용 볼륨 설정                 |
+
