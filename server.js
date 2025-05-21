@@ -8,3 +8,8 @@ app.listen(8080, () => {
 app.get('/', (req, res) => {
   res.send('안녕');
 });
+
+app.on('SIGTERM', () => {
+  ServiceWorkerRegistration.close(()=>{})
+
+})
